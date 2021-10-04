@@ -27,8 +27,8 @@ const Todo = () => {
     const [input, setInput] = useState('')
     const [todos, setTodos] = useState([])
 
-    // console.log(AuthUser)
-    // console.log(todos)
+    console.log(AuthUser)
+     console.log(todos)
 //generate list of todos
     useEffect(() => {
         AuthUser.id &&
@@ -94,7 +94,7 @@ const Todo = () => {
                     Add Todo
                 </Button>
             </InputGroup>
-{/list to user/}
+
             {todos.map((t, i) => {
                 return (
                     <>
