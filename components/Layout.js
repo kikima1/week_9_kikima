@@ -1,28 +1,77 @@
-import Head from 'next/head';
-import Link from 'next/link';
-//import {eventID} from '../pages/event'
+import { Flex, Heading, Text } from "@chakra-ui/react";
+import { useAuthUser, withAuthUser, withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth';
+import { getFirebaseAdmin } from 'next-firebase-auth';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import Layout from '../../components/layout';
 
-export default function Layout({ children, home }) {
+
+const SingleEvent = ({itemData}) => {
+  // const AuthUser = useAuthUser();
   return (
-    <div>
-      <Head>
-        <title>BasicNext.js App
-</title>
-      </Head>
-      <main>{children}</main>
-      {
-        !home && (
-         // <Link href="../event/${item.eventID}">
-          //  <a className="btn btn-primary mt-3">Back to Events</a>
-          //</Link>
-          <Link href="/">
-            <a className="btn btn-primary mt-3">Home</a>
+    <Layout>
+      <Flex>
+        <Heading>{itemData.name}</Heading>
+      </Flex>
+      <Flex>
+        <Text>{itemData.date}</Text>
+      </Flex>
+      <Flex>
+        <Text>{itemData.dessert}</Text>
+      </Flex>
+    </Layout>
+  );
+};
+
+export const getServerSideProps = withAuthUserTokenSSR(
+  {
+    whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
+  }
+)(
+  async ({ AuthUser, params }) => {
+    // take the id parameter from the url and construct a db query with it
+    const db = getFirebaseAdmin().firestore();
+    const doc = await db.collection("events").doc(params.id).get();
+    let itemData;
+    if (!doc.empty) {
+      // document was found
+      let docData = doc.data();
+      itemData = {
+        id: doc.id,
+        dessert:docData.dessert,
+        name: docData.name,
+        date: docData.date.toDate().toDateString()
+      };
+    } else {
+      // no document found
+      itemData = null;
+    }
+    // return the data
+    return {
+      props: {
+        itemData
+      }
+    }
+  }
+)
+
+export default withAuthUser(
+  {
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN
+  }
+)(SingleEvent)
+
+
+
+
+          /* {itemData ?
+      itemData.best.map(
+        ({id, name})=>(
+          <Link key={id} href={`/${id}`}>
+          <a className= "list-group-item list-group-item-action">{name}</a>
           </Link>
         )
-      }
-    </div>
-  );
-
-}
-//<Link key= {item.eventID} href={`events/${item.eventID}`}><a className="list-group-item list-group-item-action">{item.eventName}</a></Link>
-//import Layout from '../components/layout';
+      )
+      :null
+          }*/

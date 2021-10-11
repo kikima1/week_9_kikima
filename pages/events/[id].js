@@ -3,7 +3,7 @@ import { useAuthUser, withAuthUser, withAuthUserTokenSSR, AuthAction } from 'nex
 import { getFirebaseAdmin } from 'next-firebase-auth';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout';
 
 
 const SingleEvent = ({itemData}) => {
