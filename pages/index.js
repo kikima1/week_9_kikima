@@ -6,6 +6,7 @@ import {
 } from 'next-firebase-auth'
 import Header from '../components/Header'
 import DemoPageLinks from '../components/DemoPageLinks'
+import Link from 'next/link'
 
 const styles = {
   content: {
@@ -33,6 +34,8 @@ const Demo = () => {
             and load the authed user only on the client side.
           </p>
           <a href="/todo" style={{ fontSize: "40px", textDecoration: 'underline' }}>Add a todo!</a>
+          <p>OR</p>
+          <a href="/event" style={{ fontSize: "40px", textDecoration: 'underline' }}>Add an event!</a>
         </div>
         <DemoPageLinks />
       </div>
@@ -43,3 +46,5 @@ const Demo = () => {
 export const getServerSideProps = withAuthUserTokenSSR()()
 
 export default withAuthUser()(Demo)
+
+
