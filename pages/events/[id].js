@@ -3,11 +3,13 @@ import { useAuthUser, withAuthUser, withAuthUserTokenSSR, AuthAction } from 'nex
 import { getFirebaseAdmin } from 'next-firebase-auth';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import Layout from '../../components/Layout';
+
 
 const SingleEvent = ({itemData}) => {
   // const AuthUser = useAuthUser();
   return (
-    <>
+    <Layout>
       <Flex>
         <Heading>{itemData.name}</Heading>
       </Flex>
@@ -17,7 +19,7 @@ const SingleEvent = ({itemData}) => {
       <Flex>
         <Text>{itemData.dessert}</Text>
       </Flex>
-    </>
+    </Layout>
   );
 };
 
