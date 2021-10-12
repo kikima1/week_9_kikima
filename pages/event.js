@@ -24,15 +24,16 @@ import Link from 'next/link'
 
 
 
-
+//Event holds state hook and effect hook. State - useState, Effect - useEffect
 const Event = () => {
   const AuthUser = useAuthUser()
+  //set hook properties? variable? to empty to start
   const [inputName, setInputName] = useState('')
   const [inputDate, setInputDate] = useState('')
   const [inputDessert, setInputDessert] = useState('')
 
   const [events, setEvents] = useState([])
-
+//Effect hook
   useEffect(() => {
     AuthUser.id &&
       firebase
@@ -71,7 +72,7 @@ const Event = () => {
           user: AuthUser.id
         })
         .then(console.log('Data was successfully sent to cloud firestore!'));
-      // flush out the user-entered values in the input elements onscreen
+      // reset onscreen user fields to prompts
       setInputName('');
       setInputDate('');
       setInputDessert('');
@@ -93,7 +94,7 @@ const Event = () => {
       console.log(error)
     }
   }
-
+//React component - display of changing data
     return (
       <Flex flexDir="column" maxW={800} align="center" justify="center" minH="100vh" m="auto" px={4}>
         <Flex justify="space-between" w="100%" align="center">
@@ -120,7 +121,7 @@ const Event = () => {
             Add
           </Button>
         </InputGroup>
-
+      
         {events.map((item, i) => {
           return (
             <React.Fragment key={i}>

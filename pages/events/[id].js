@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Layout from '../../components/Layout';
 
-
+//This code creates the output of a single event from a document in FireStore database and displays it in react component
 const SingleEvent = ({itemData}) => {
   // const AuthUser = useAuthUser();
   return (
@@ -23,18 +23,18 @@ const SingleEvent = ({itemData}) => {
   );
 };
 
+//this creates get serverside props which will hold the single event information to be used by other components for path-guided information gathering and display
 export const getServerSideProps = withAuthUserTokenSSR(
   {
     whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
   }
-)(
+)(//query the database using params.id
   async ({ AuthUser, params }) => {
-    // take the id parameter from the url and construct a db query with it
     const db = getFirebaseAdmin().firestore();
     const doc = await db.collection("events").doc(params.id).get();
     let itemData;
     if (!doc.empty) {
-      // document was found
+      // data exists
       let docData = doc.data();
       itemData = {
         id: doc.id,
@@ -43,10 +43,10 @@ export const getServerSideProps = withAuthUserTokenSSR(
         date: docData.date.toDate().toDateString()
       };
     } else {
-      // no document found
+      // no data exists
       itemData = null;
     }
-    // return the data
+    
     return {
       props: {
         itemData
