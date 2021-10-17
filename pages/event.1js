@@ -11,7 +11,6 @@ import {
     Divider,
 } from "@chakra-ui/react"
 import { AddIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons"
-import DarkModeSwitch from '../components/DarkModeSwitch'
 import {
     useAuthUser,
     withAuthUser,
@@ -26,30 +25,31 @@ import Link from 'next/link'
 
 
 //Event holds state hook and effect hook. State - useState, Effect - useEffect
-const Todo = () => {
+const Event = () => {
   const AuthUser = useAuthUser()
   //set hook properties? variable? to empty to start
-  const [input, setInput] = useState('')
-  //const [inputTime, setTime]= useState('')
-  const [todos, setTodos] = useState([])
+  const [inputName, setInputName] = useState('')
+  const [inputDate, setInputDate] = useState('')
+  const [inputDessert, setInputDessert] = useState('')
+
+  const [events, setEvents] = useState([])
 //Effect hook
   useEffect(() => {
     AuthUser.id &&
       firebase
         .firestore()
-        .collection("todos")
+        .collection("events")
         .where( 'user', '==', AuthUser.id )
-        //.orderBy('timestamp', 'desc')//may need to take out
         .onSnapshot(
           snapshot => {
-            setTodos(
+            setEvents(
               snapshot.docs.map(
                 doc => {
                   return {
-                    todoID: doc.id,
-                    todo: doc.data().todo
-                    //timestamp: doc.data().date.toDate().toDateString(),
-                    
+                    eventID: doc.id,
+                    eventName: doc.data().name,
+                    eventDate: doc.data().date.toDate().toDateString(),
+                    eventDessert: doc.data().dessert
                   }
                 }
               )
@@ -63,27 +63,30 @@ const Todo = () => {
       // try to update doc
       firebase
         .firestore()
-        .collection("todos") // all users will share one collection
+        .collection("events") // all users will share one collection
         .add({
-          todo: input,
+          name: inputName,
+          dessert: inputDessert,
+          date: firebase.firestore.Timestamp.fromDate( new Date(inputDate) ),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           user: AuthUser.id
         })
         .then(console.log('Data was successfully sent to cloud firestore!'));
       // reset onscreen user fields to prompts
-      setInput('');
-      
+      setInputName('');
+      setInputDate('');
+      setInputDessert('');
 
     } catch (error) {
       console.log(error)
     }
   }
 
-  const deleteTodo = (t) => {
+  const deleteEvent = (t) => {
     try {
       firebase
         .firestore()
-        .collection("todos")
+        .collection("events")
         .doc(t)
         .delete()
         .then(console.log('Data was successfully deleted!'))
@@ -97,7 +100,7 @@ const Todo = () => {
         <Flex justify="space-between" w="100%" align="center">
           <Heading mb={4}>Welcome, {AuthUser.email}!</Heading>
           <Flex>
-            <DarkModeSwitch />
+            
             <IconButton ml={2} onClick={AuthUser.signOut} icon={<StarIcon />} />
           </Flex>
         </Flex>
@@ -107,19 +110,19 @@ const Todo = () => {
             pointerEvents="none"
             children={<AddIcon color="gray.300" />}
           />
-         
-          <Input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Todo" />
-          
+          <Input type="text" value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder="Event Title" />
+          <Input type="date" value={inputDate} onChange={(e) => setInputDate(e.target.value)} placeholder="Event Date" />
+          <Input type="text" value={inputDessert} onChange={(e) => setInputDessert(e.target.value)} placeholder="Favorite Dessert" />
 
           <Button
             ml={2}
             onClick={() => sendData()}
           >
-            Add Todo
+            Add
           </Button>
         </InputGroup>
       
-        {todos.map((t, i) => {
+        {events.map((item, i) => {
           return (
             <React.Fragment key={i}>
               {i > 0 && <Divider />}
@@ -134,9 +137,11 @@ const Todo = () => {
                 <Flex align="center">
                 
                   <Text fontSize="xl" mr={4}>{i + 1}.</Text>
-                  <Text><Link key= {t.todoID} href={`todos/${t.todoID}`}><a className="list-group-item list-group-item-action">{t.todo}</a></Link></Text>
-                  </Flex>
-                <IconButton onClick={() => deleteTodo(t.todoID)} icon={<DeleteIcon />} />
+                  <Text><Link key= {item.eventID} href={`events/${item.eventID}`}><a className="list-group-item list-group-item-action">{item.eventName}</a></Link></Text>
+                  <Text>... {item.eventDate}</Text>
+                  <Text>...{item.eventDessert}</Text>
+                </Flex>
+                <IconButton onClick={() => deleteEvent(item.eventID)} icon={<DeleteIcon />} />
               </Flex>
             </React.Fragment>
           )
@@ -157,7 +162,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN,
-})(Todo)
+})(Event)
 
 /* <div className="list-group">
           {allData ?
@@ -172,7 +177,7 @@ export default withAuthUser({
          <Text><Link key= {id} href={`/${id}`}><a className="list-group-item list-group-item-action">{item.eventName}</a></Link></Text> 
           
           
-          <Text>{t.todo}</Text></Flex>
+          
           */
 
 

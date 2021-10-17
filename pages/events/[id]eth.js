@@ -17,15 +17,11 @@ import { getFirebaseAdmin } from 'next-firebase-auth';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Header from '../../components/Header';
-import Layout from '../../components/Layout';
-
 
 const SingleEvent = ({itemData}) => {
   const AuthUser = useAuthUser();
   const [inputName, setInputName] = useState(itemData.name);
   const [inputDate, setInputDate] = useState(itemData.date);
-  const [inputDessert, setInputDessert] = useState(itemData.dessert);
-
   const [statusMsg, setStatusMsg] = useState('');
   
   const sendData = async () => {
@@ -39,8 +35,7 @@ const SingleEvent = ({itemData}) => {
         docref.update(
           {
             name: inputName,
-            date: firebase.firestore.Timestamp.fromDate( new Date(inputDate) ),
-            dessert: inputDessert
+            date: firebase.firestore.Timestamp.fromDate( new Date(inputDate) )
           }
         );
         setStatusMsg("Updated!");
@@ -52,7 +47,7 @@ const SingleEvent = ({itemData}) => {
   }
 
   return (
-    <Layout>
+    <>
       <Header 
         email={AuthUser.email} 
         signOut={AuthUser.signOut} />
@@ -64,7 +59,6 @@ const SingleEvent = ({itemData}) => {
           />
           <Input type="text" value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder="Event Title" />
           <Input type="text" value={inputDate} onChange={(e) => setInputDate(e.target.value)} placeholder="Event Date" />
-          <Input type="text" value={inputDessert} onChange={(e) => setInputDessert(e.target.value)} placeholder="Favorite Dessert" />
           <Button
             ml={2}
             onClick={() => sendData()}
@@ -76,7 +70,7 @@ const SingleEvent = ({itemData}) => {
           {statusMsg}
         </Text>
       </Flex>
-    </Layout>
+    </>
   );
 };
 
@@ -96,8 +90,7 @@ export const getServerSideProps = withAuthUserTokenSSR(
       itemData = {
         id: doc.id,
         name: docData.name,
-        date: docData.date.toDate().toDateString(),
-        dessert:docData.dessert
+        date: docData.date.toDate().toDateString()
       };
     } else {
       // no document found
@@ -118,5 +111,3 @@ export default withAuthUser(
     whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN
   }
 )(SingleEvent)
-
-          

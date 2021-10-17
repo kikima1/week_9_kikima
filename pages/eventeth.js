@@ -26,7 +26,6 @@ const Event = () => {
   const AuthUser = useAuthUser();
   const [inputName, setInputName] = useState('');
   const [inputDate, setInputDate] = useState('');
-  const [inputDessert, setInputDessert] = useState('');
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -43,10 +42,7 @@ const Event = () => {
                   return {
                     eventID: doc.id,
                     eventName: doc.data().name,
-                    eventDate: doc.data().date.toDate().toDateString(),
-                    eventDessert: doc.data().dessert
-
-
+                    eventDate: doc.data().date.toDate().toDateString()
                   }
                 }
               )
@@ -65,14 +61,12 @@ const Event = () => {
           name: inputName,
           date: firebase.firestore.Timestamp.fromDate( new Date(inputDate) ),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          dessert: inputDessert,
           user: AuthUser.id
         })
         .then(console.log('Data was successfully sent to cloud firestore!'));
       // flush out the user-entered values in the input elements onscreen
       setInputName('');
       setInputDate('');
-      setInputDessert('');
 
     } catch (error) {
       console.log(error);
@@ -105,7 +99,6 @@ const Event = () => {
           />
           <Input type="text" value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder="Event Title" />
           <Input type="date" value={inputDate} onChange={(e) => setInputDate(e.target.value)} placeholder="Event Date" />
-          <Input type="text" value={inputDessert} onChange={(e) => setInputDessert(e.target.value)} placeholder="Favorite Dessert" />
           <Button
             ml={2}
             onClick={() => sendData()}
@@ -134,8 +127,6 @@ const Event = () => {
                     </Link>
                   </Text>
                   <Text>... {item.eventDate}</Text>
-                  <Text>... {item.eventDessert}</Text>
-
                 </Flex>
                 <IconButton onClick={() => deleteEvent(item.eventID)} icon={<DeleteIcon />} />
               </Flex>
