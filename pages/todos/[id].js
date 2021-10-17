@@ -1,45 +1,105 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import {
+    Flex,
+    Heading,
+    InputGroup,
+    InputLeftElement,
+    Input,
+    Button,
+    Text,
+    IconButton,
+    Divider,
+    Link,
+} from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import { useAuthUser, withAuthUser, withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth';
 import { getFirebaseAdmin } from 'next-firebase-auth';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import Header from '../../components/Header';
 import Layout from '../../components/Layout';
 
-//This code creates the output of a single event from a document in FireStore database and displays it in react component
-const SingleEvent = ({itemData}) => {
-  // const AuthUser = useAuthUser();
+
+const SingleTodo = ({itemData}) => {
+  const AuthUser = useAuthUser();
+  const [inputTodo, setInputTodo] = useState(itemData.todo);
+  
+
+  const [statusMsg, setStatusMsg] = useState('');
+  
+  const sendData = async () => {
+    try {
+      console.log("sending!");
+      // try to update doc
+      const docref = await firebase.firestore().collection("todos").doc(itemData.id);
+      const doc = docref.get();
+
+      if (!doc.empty) {
+        docref.update(
+          {
+            todo: inputTodo,
+            //date: firebase.firestore.Timestamp.fromDate( new Date(inputDate) )
+          }
+        );
+        setStatusMsg("Updated!");
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Layout>
-      <Flex>
-        <Heading>{itemData.todo}</Heading>
+      <Header 
+        email={AuthUser.email} 
+        signOut={AuthUser.signOut} />
+      <Flex flexDir="column" maxW={800} align="center" justify="start" minH="100vh" m="auto" px={4} py={3}>
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents="none"
+            children={<AddIcon color="gray.300" />}
+          />
+          <Input type="text" value={inputTodo} onChange={(e) => setInputTodo(e.target.value)} placeholder="Todo item" />
+          
+          <Button
+            ml={2}
+            onClick={() => sendData()}
+          >
+            Update
+          </Button>
+        </InputGroup>
+        <Text>
+          {statusMsg}
+        </Text>
       </Flex>
-     
     </Layout>
   );
 };
 
-//this creates get serverside props which will hold the single event information to be used by other components for path-guided information gathering and display
 export const getServerSideProps = withAuthUserTokenSSR(
   {
     whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
   }
-)(//query the database using params.id
+)(
   async ({ AuthUser, params }) => {
+    // take the id parameter from the url and construct a db query with it
     const db = getFirebaseAdmin().firestore();
     const doc = await db.collection("todos").doc(params.id).get();
     let itemData;
     if (!doc.empty) {
-      // data exists
+      // document was found
       let docData = doc.data();
       itemData = {
         id: doc.id,
-        todo:docData.todo
+        todo: docData.todo
+        
       };
     } else {
-      // no data exists
+      // no document found
       itemData = null;
     }
-    
+    // return the data
     return {
       props: {
         itemData
@@ -53,18 +113,6 @@ export default withAuthUser(
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
     whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN
   }
-)(SingleEvent)
+)(SingleTodo)
 
-
-
-
-          /* {itemData ?
-      itemData.best.map(
-        ({id, name})=>(
-          <Link key={id} href={`/${id}`}>
-          <a className= "list-group-item list-group-item-action">{name}</a>
-          </Link>
-        )
-      )
-      :null
-          }*/
+          
