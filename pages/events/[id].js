@@ -75,6 +75,13 @@ const SingleEvent = ({itemData}) => {
         <Text>
           {statusMsg}
         </Text>
+        <Button>
+          <Link href={`../event`}>
+
+            <a className="btn btn-primary mt-3">Back to List</a>
+          </Link>
+        </Button>
+
       </Flex>
     </Layout>
   );
