@@ -36,6 +36,8 @@ const Demo = () => {
           <a href="/todo" style={{ fontSize: "40px", textDecoration: 'underline' }}>Add a todo!</a>
           <p>OR</p>
           <a href="/event" style={{ fontSize: "40px", textDecoration: 'underline' }}>Add an event!</a>
+          <p>OR</p>
+          <a href="/contact" style={{ fontSize: "40px", textDecoration: 'underline' }}>Add a contact!</a>
         </div>
         <DemoPageLinks />
       </div>

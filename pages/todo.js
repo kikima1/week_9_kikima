@@ -130,7 +130,7 @@ const Todo = () => {
                   
 
                 </Flex>
-                <IconButton onClick={() => deleteEvent(t.todoID)} icon={<DeleteIcon />} />
+                <IconButton onClick={() => deleteTodo(t.todoID)} icon={<DeleteIcon />} />
               </Flex>
             </React.Fragment>
           )

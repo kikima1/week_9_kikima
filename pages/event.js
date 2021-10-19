@@ -21,6 +21,7 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Header from '../components/Header';
+import Layout from '../components/Layout';
 
 const Event = () => {
   const AuthUser = useAuthUser();
@@ -93,7 +94,7 @@ const Event = () => {
   };
 
   return (
-    <>
+    <Layout>
       <Header 
         email={AuthUser.email} 
         signOut={AuthUser.signOut} />
@@ -143,7 +144,7 @@ const Event = () => {
           )
         })}
       </Flex>
-    </>
+    </Layout>
   )
 }
 
