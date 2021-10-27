@@ -89,29 +89,29 @@ const Todo = () => {
   };
 
  return (
-    <>
+    <Layout>
       <Header 
         email={AuthUser.email} 
         signOut={AuthUser.signOut} />
-      <Flex flexDir="column" maxW={800} align="left" justify="start" minH="100vh" m={4} px={4} py={6}>
-      <Heading size="xl">New To Do</Heading>
-      <Flex flexDir="column" minW={200} align="left" justify="start" minH="100vh" m="auto" px={4} py={6}>
+      <Flex flexDir="column" maxW={800} align="left" justify="start" minH="100vh" m="auto" px={4} py={10}>
+      <Heading size="lg">New To Do</Heading>
+      {/*<Flex flexDir="column" maxW={800} align="left" justify="start" minH="100vh" m="auto" px={4} py={6}>*/}
   
-        <InputGroup>
+       {/*} <InputGroup>
           <InputLeftElement
             pointerEvents="none"
             children=""
-          />
+          />*/}
           
-          <Input type="text" value={inputTodo} onChange={(e) => setInputTodo(e.target.value)} placeholder="Let's get busy!" />
+          <Input type="text" value={inputTodo} onChange={(e) => setInputTodo(e.target.value)} placeholder="What would you like to do today?" />
          
-          <Button 
-            ml={10}
+          <Button
+            ml={2}
             onClick={() => sendData()}
           >
             Add To Do
           </Button>
-        </InputGroup>
+        {/*</InputGroup>*/}
 
         {todos.map((t, i) => {
           return (
@@ -140,9 +140,9 @@ const Todo = () => {
             </React.Fragment>
           )
         })}
-      </Flex>  
+      {/*</Flex>  */}
       </Flex>
-    </>
+    </Layout>
   )
 }
 

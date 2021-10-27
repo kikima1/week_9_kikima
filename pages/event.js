@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+    Container,
     Flex,
     Heading,
     InputGroup,
@@ -94,19 +95,21 @@ const Event = () => {
   };
 
   return (
-    <Layout>
+    <>
       <Header 
         email={AuthUser.email} 
         signOut={AuthUser.signOut} />
-      <Flex flexDir="column" maxW={800} align="center" justify="start" minH="100vh" m="auto" px={4} py={3}>
+      <Flex flexDir="column" maxW={800} align="left" justify="start" minH="100vh" m="auto" px={2} py={6}>
+      <Heading size="xl">New Event</Heading>
+      <Flex flexDir="column" maxW={800} align="left" justify="start" minH="100vh" m="auto" px={20} py={6}>
         <InputGroup>
           <InputLeftElement
             pointerEvents="none"
-            children={<AddIcon color="gray.300" />}
+            children=""
           />
-          <Input type="text" value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder="Event Title" />
+          <Input type="text" value={inputName} onChange={(e) => setInputName(e.target.value)} placeholder=" Title" />
           <Input type="date" value={inputDate} onChange={(e) => setInputDate(e.target.value)} placeholder="Event Date" />
-          <Input type="text" value={inputDessert} onChange={(e) => setInputDessert(e.target.value)} placeholder="Favorite Dessert" />
+          <Input type="text" value={inputDessert} onChange={(e) => setInputDessert(e.target.value)} placeholder=" Dessert" />
           <Button
             ml={2}
             onClick={() => sendData()}
@@ -143,8 +146,9 @@ const Event = () => {
             </React.Fragment>
           )
         })}
+        </Flex>
       </Flex>
-    </Layout>
+    </>
   )
 }
 

@@ -17,7 +17,6 @@ import {
     Divider,
     Link,
     VStack,
-    Stack,
     useBreakpointValue,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -32,7 +31,7 @@ import 'firebase/firestore';
 import Header from '../components/Header';
 
 const Contact = () => {
-  
+  const colSpan = useBreakpointValue({ base: 2, md: 1 });
   const AuthUser = useAuthUser();
   const [inputFirstName, setInputFirstName] = useState('');
   const [inputLastName, setInputLastName] = useState('');
@@ -128,7 +127,7 @@ const Contact = () => {
       console.log(error);
     }
   };
-const colSpan = useBreakpointValue({ base: 2, md: 1 });
+
   return (
     <>
      <Header 
@@ -137,54 +136,48 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
         signOut={AuthUser.signOut} />
         
      
-    
-  
-       <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
-       <Stack direction={'column'}>
-      <VStack spacing={3} alignItems="flex-start">
-      <Heading size="xl">New Contact</Heading>
-      </VStack>
-      <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
+    <Container>
+    <Flex flexDir="column" maxW={1200} align="left" justify="start" minH="50vh" m="auto" px={5} py={50}>
+       <VStack w="full" h="full" p={5} spacing={5} alignItems="flex-start">
+      
+      <SimpleGrid columns={1} columnGap={5} rowGap={5} w="full">
      
       
-       {/* <InputGroup>
+        <InputGroup>
           <InputLeftElement
             pointerEvents="none"
             children=""
-          />*/}
-          <GridItem colSpan={colSpan}>
+          />
+          <GridItem colSpan={5}>
           <FormControl>
             <FormLabel>First Name</FormLabel>
             <Input type="text" value={inputFirstName} onChange={(e) => setInputFirstName(e.target.value)} placeholder="Jane/John/Jan" />
           </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
+          <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>Last Name</FormLabel>
             <Input type="text" value={inputLastName} onChange={(e) => setInputLastName(e.target.value)} placeholder="Doe/Buck/Deer" />
           </FormControl></GridItem>
-          
           <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>Street Address</FormLabel>
             <Input type="text" value={inputStreetAddress} onChange={(e) => setInputStreetAddress(e.target.value)} placeholder="1 Main Street" />
           </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
+          <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>City</FormLabel>
             <Input type="text" value={inputCity} onChange={(e) => setInputCity(e.target.value)} placeholder="AnyTown" />
           </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
+          <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>State</FormLabel>
             <Input type="text" value={inputState} onChange={(e) => setInputState(e.target.value)} placeholder="AnyState" />
           </FormControl></GridItem>
-         
           <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>Country</FormLabel>
             <Input type="text" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} placeholder="Gondwanaland" />
           </FormControl></GridItem>
-          
           <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>Postal Code</FormLabel>
@@ -198,7 +191,7 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
           <GridItem colSpan={2}>
           <FormControl>
             <FormLabel>Email</FormLabel>
-            <Input type="text" value={inputEmail} onChange={(e) => setInputEmail(e.target.value)} placeholder="me@myname.com" />
+            <Input type="text" value={inputFirstName} onChange={(e) => setInputFirstName(e.target.value)} placeholder="me@myname.com" />
           </FormControl></GridItem>
          
           
@@ -209,17 +202,12 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
           >
             Add
           </Button>
-        {/*</InputGroup>*/}
+        </InputGroup>
         
         </SimpleGrid>
-        
-        </Stack>
      </VStack>
-     
-     
-     
-     
-     
+     </Flex>
+     </Container>
 
         {contacts.map((item, i) => {
           return (
@@ -276,14 +264,13 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
               </Flex>
             </React.Fragment>
           )
-            
           
         }
+        
         )}
         
-        </>
       
-    
+    </>
   )
 }
 

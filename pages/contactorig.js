@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container,
     Flex,
-    FormControl,
-    FormLabel,
     Heading,
     InputGroup,
     InputLeftElement,
     Input,
     Button,
     Text,
-    Select,
-    SimpleGrid,
-    GridItem,
     IconButton,
     Divider,
     Link,
-    VStack,
-    Stack,
-    useBreakpointValue,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
@@ -32,18 +23,15 @@ import 'firebase/firestore';
 import Header from '../components/Header';
 
 const Contact = () => {
-  
   const AuthUser = useAuthUser();
   const [inputFirstName, setInputFirstName] = useState('');
   const [inputLastName, setInputLastName] = useState('');
   const [inputStreetAddress, setInputStreetAddress] = useState('');
   const [inputCity, setInputCity] = useState('');
   const [inputState, setInputState] = useState('');
-  const [inputCountry, setInputCountry] = useState('');
   const [inputPostCode, setInputPostCode] = useState('');
   const [inputPhone, setInputPhone] = useState('');
   const [inputEmail, setInputEmail] = useState('');
-  
 
   const [contacts, setContacts] = useState([]);
 
@@ -65,7 +53,6 @@ const Contact = () => {
                     contactStreetAddress: doc.data().streetaddress,
                     contactCity: doc.data().city,
                     contactState:doc.data().state,
-                    contactCountry:doc.data().country,
                     contactPostCode:doc.data().postcode,
                     contactPhone:doc.data().phone,
                     contactEmail:doc.data().email,
@@ -92,7 +79,6 @@ const Contact = () => {
           streetaddress: inputStreetAddress,
           city: inputCity,
           state: inputState,
-          country: inputCountry,
           postcode: inputPostCode,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           email: inputEmail,
@@ -106,7 +92,6 @@ const Contact = () => {
       setInputStreetAddress('');
       setInputCity('');
       setInputState('');
-      setInputCountry('');
       setInputPostCode('');
       setInputPhone('');
       setInputEmail('');
@@ -128,98 +113,38 @@ const Contact = () => {
       console.log(error);
     }
   };
-const colSpan = useBreakpointValue({ base: 2, md: 1 });
+
   return (
     <>
-     <Header 
-      
+      <Header 
         email={AuthUser.email} 
         signOut={AuthUser.signOut} />
-        
-     
-    
-  
-       <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
-       <Stack direction={'column'}>
-      <VStack spacing={3} alignItems="flex-start">
-      <Heading size="xl">New Contact</Heading>
-      </VStack>
-      <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
-     
-      
-       {/* <InputGroup>
+      <Flex flexDir="column" maxW={800} align="center" justify="start" minH="100vh" m="auto" px={4} py={3}>
+        <InputGroup>
           <InputLeftElement
             pointerEvents="none"
             children=""
-          />*/}
-          <GridItem colSpan={colSpan}>
-          <FormControl>
-            <FormLabel>First Name</FormLabel>
-            <Input type="text" value={inputFirstName} onChange={(e) => setInputFirstName(e.target.value)} placeholder="Jane/John/Jan" />
-          </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
-          <FormControl>
-            <FormLabel>Last Name</FormLabel>
-            <Input type="text" value={inputLastName} onChange={(e) => setInputLastName(e.target.value)} placeholder="Doe/Buck/Deer" />
-          </FormControl></GridItem>
-          
-          <GridItem colSpan={2}>
-          <FormControl>
-            <FormLabel>Street Address</FormLabel>
-            <Input type="text" value={inputStreetAddress} onChange={(e) => setInputStreetAddress(e.target.value)} placeholder="1 Main Street" />
-          </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
-          <FormControl>
-            <FormLabel>City</FormLabel>
-            <Input type="text" value={inputCity} onChange={(e) => setInputCity(e.target.value)} placeholder="AnyTown" />
-          </FormControl></GridItem>
-          <GridItem colSpan={colSpan}>
-          <FormControl>
-            <FormLabel>State</FormLabel>
-            <Input type="text" value={inputState} onChange={(e) => setInputState(e.target.value)} placeholder="AnyState" />
-          </FormControl></GridItem>
-         
-          <GridItem colSpan={2}>
-          <FormControl>
-            <FormLabel>Country</FormLabel>
-            <Input type="text" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} placeholder="Gondwanaland" />
-          </FormControl></GridItem>
-          
-          <GridItem colSpan={2}>
-          <FormControl>
-            <FormLabel>Postal Code</FormLabel>
-            <Input type="text" value={inputPostCode} onChange={(e) => setInputPostCode(e.target.value)} placeholder="12345" />
-          </FormControl></GridItem>
-          <GridItem colSpan={2}>
-          <FormControl>
-            <FormLabel>Phone</FormLabel>
-            <Input type="text" value={inputPhone} onChange={(e) => setInputPhone(e.target.value)} placeholder="303-555-1212" />
-          </FormControl></GridItem>
-          <GridItem colSpan={2}>
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <Input type="text" value={inputEmail} onChange={(e) => setInputEmail(e.target.value)} placeholder="me@myname.com" />
-          </FormControl></GridItem>
-         
-          
-          
+          />
+          <ul>
+          <li><Input type="text" value={inputFirstName} onChange={(e) => setInputFirstName(e.target.value)} placeholder="First Name" /></li>
+          <br/>
+          <li><Input type="text" value={inputLastName} onChange={(e) => setInputLastName(e.target.value)} placeholder="Last Name" /></li>
+         <br/>
+          <li><Input type="text" value={inputStreetAddress} onChange={(e) => setInputStreetAddress(e.target.value)} placeholder="Street Address" /></li>
+          <br/>
+          <li><Input type="text" value={inputCity} onChange={(e) => setInputCity(e.target.value)} placeholder="City" /></li><br/>
+          <li><Input type="text" value={inputState} onChange={(e) => setInputState(e.target.value)} placeholder="State" /></li><br/>
+          <li><Input type="text" value={inputPostCode} onChange={(e) => setInputPostCode(e.target.value)} placeholder="Postal Code" /></li><br/>
+          <li><Input type="text" value={inputPhone} onChange={(e) => setInputPhone(e.target.value)} placeholder="Phone" /></li><br/>
+          <li><Input type="text" value={inputEmail} onChange={(e) => setInputEmail(e.target.value)} placeholder="Email" /></li><br/>
+          </ul>
           <Button
             ml={2}
             onClick={() => sendData()}
           >
             Add
           </Button>
-        {/*</InputGroup>*/}
-        
-        </SimpleGrid>
-        
-        </Stack>
-     </VStack>
-     
-     
-     
-     
-     
+        </InputGroup>
 
         {contacts.map((item, i) => {
           return (
@@ -233,7 +158,7 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
                 borderRadius={5}
                 justifyContent="space-between"
               >
-                <Flex align="left">
+                <Flex align="center">
                 
                   <Text fontSize="xl" mr={4}>{i + 1}.</Text>
                   <Text>
@@ -276,14 +201,9 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
               </Flex>
             </React.Fragment>
           )
-            
-          
-        }
-        )}
-        
-        </>
-      
-    
+        })}
+      </Flex>
+    </>
   )
 }
 
