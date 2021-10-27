@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import {
     Container,
     Flex,
@@ -209,6 +209,8 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
           >
             Add
           </Button>
+          <Text><br/><br/><br/><br/></Text>
+          <Heading size="md">Tap on a name below to view and edit contact</Heading>
         {/*</InputGroup>*/}
         
         </SimpleGrid>
@@ -223,56 +225,38 @@ const colSpan = useBreakpointValue({ base: 2, md: 1 });
 
         {contacts.map((item, i) => {
           return (
+            
             <React.Fragment key={i}>
               {i > 0 && <Divider />}
+              
               <Flex
+              
                 w="100%"
-                p={5}
-                my={2}
-                align="center"
-                borderRadius={5}
-                justifyContent="space-between"
-              >
-                <Flex align="left">
+                p={2}
+                my={4}
+                ml={20} 
+                justifyContent="space-evenly"
+                >
+    
+                <Flex w="20%">
                 
                   <Text fontSize="xl" mr={4}>{i + 1}.</Text>
-                  <Text>
+                  <Text align="left">
                     <Link href={'/contacts/' + item.contactID}>
-                    {item.contactFirstName}
+                    {item.contactFirstName + " " + item.contactLastName}
                     </Link>
                     </Text>
-                    <br/>
-                    <Text>
-                    <Link href={'/contacts/' + item.contactID}>
-                     {item.contactLastName}
-                    </Link>
-                  </Text>
-                  <br/>
-                  <Text> {item.contactStreetAddress}</Text>
-                  <br/>
+                    </Flex>
+                   <Flex w="80%"
+                
+                 justifyContent="space-evenly"> 
+                    <Text> {item.contactStreetAddress +" " + item.contactCity +" " + item.contactState +" " + item.contactPostCode}</Text>
+                   <Text> {" " + item.contactPhone }</Text>
                   
-                  <Text> {item.contactCity}</Text>
-                  
-                  <br/>   
-                  
-                  <Text> {item.contactState}</Text>
-                  <br/>
-
-                  
-                  <Text> {item.contactPostCode}</Text>
-                  
-                  <br/>
-                  
-                  <Text> {item.contactPhone}</Text>
-                  <br/>
-
-                  
-                  <Text> {item.contactEmail}</Text>
-                  <br/>
-                  
-
+                 <Flex alignSelf = "flex-start"> 
+                  <IconButton onClick={() => deleteContact(item.contactID)} icon={<DeleteIcon />} />
                 </Flex>
-                <IconButton onClick={() => deleteContact(item.contactID)} icon={<DeleteIcon />} />
+                </Flex>
               </Flex>
             </React.Fragment>
           )
